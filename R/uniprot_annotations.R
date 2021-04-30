@@ -1,7 +1,7 @@
 #' Retrieve IDs from the uniprot REST API
 #'
 #' This functions retrives IDs from the uniprot server. It takes as input swiss
-#' #' prot identifers that generated in the trinnoate output table, or that are
+#' prot identifers that generated in the trinnoate output table, or that are
 #' retrieved form a blast search against the swiss prot database (it also works
 #' with Trembl IDs)
 #' You have to provide a vector ID names e.g ID = c("MSRA_PSEPW","NAT6_HUMAN")

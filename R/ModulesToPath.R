@@ -1,8 +1,8 @@
-#'ModulesToPath: adds module inforamtion to the output of MapKo_idToPathway
+#' ModulesToPath: adds module inforamtion to the output of MapKo_idToPathway
 #'
-#'Example: id <- c("ko:K00031","ko:K00001","ko:K00002")
-#'out <- MapKo_idToPathway(id=id)
-#'ModulesToPath(out)
+#' Example: id <- c("ko:K00031","ko:K00001","ko:K00002")
+#' out <- MapKo_idToPathway(id=id)
+#' ModulesToPath(out)
 #'
 #' @param path output data frame of the MapKo_idToPathway
 #' @return dataframe with module inforamtion added to the output of MapKo_idToPathway

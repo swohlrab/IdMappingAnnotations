@@ -1,11 +1,11 @@
-#'MapKo_idToPathway: retrieve pathway inforamtion for ko ids
+#' MapKo_idToPathway: retrieve pathway inforamtion for ko ids
 #'
-#'This function takes as input a vector of ko ids in the format of ko:KXXXXX and returns a data frame
-#'with associated kegg pathway inforamtions. If you also want to have the respective module information,
-#'run afterwards the function 'ModulesToPath'
+#' This function takes as input a vector of ko ids in the format of ko:KXXXXX and returns a data frame
+#' with associated kegg pathway inforamtions. If you also want to have the respective module information,
+#' run afterwards the function 'ModulesToPath'
 #'
-#'Example: id <- id <- c("ko:K00031","ko:K00001","ko:K00002")
-#'MapKo_idToPathway(id=id)
+#' Example: id <- id <- c("ko:K00031","ko:K00001","ko:K00002")
+#' MapKo_idToPathway(id=id)
 #'
 #' @param id vector of ko ids in the format ko:KXXXXX
 #' @return dataframe with ko ids and associated kegg pathway information
