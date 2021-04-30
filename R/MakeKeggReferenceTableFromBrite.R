@@ -1,10 +1,11 @@
 #' MakeKeggReferenceTable: creates a reference table for your Kegg hierachical files
 #'
 #' This function takes as input a brite ID and convert the hierachical files into a dataframe.
-#' The Kegg brite IDs can be retrieved with the helper function brite_ids() (#under construction)
+#' The Kegg brite IDs can be retrieved with the helper function brite_ids()
+#' Example: MakeKeggReferenceTableFromBrite(brite="br:br08901") returns the pathway calssifications
 #'
 #' @param brite Kegg brite ID
-#' @return A data frame with all requested IDs
+#' @return A data frame with kegg hierachy files
 #' @export
 MakeKeggReferenceTableFromBrite <- function(brite) {
   htext <- readLines(paste("http://rest.kegg.jp/get/",brite,sep=""))
