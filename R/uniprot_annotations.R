@@ -37,8 +37,12 @@ uniprot_annotations <- function(ids,database) {
   query_match <- dat2[grepl(".From", names(dat2))]
   lto <- dat2[!grepl(".From", names(dat2))]
   ifelse(length(query_match) > 1000, names <- sub("\\..*", "", gsub("^.+?\\.(.*)","\\1", names(query_match))), names <- sub("\\..*", "",names(query_match)))
-  dat2 <- as.data.frame(cbind(names, query_match, lto)) #rename Query to someting with a or b
-  dat2 <- dat2 %>% spread(names, lto)
+  dat2 <- as.data.frame(cbind(names, query_match, lto),stringsAsFactors = F) #rename Query to someting with a or b
+  dat2 <- split(dat2,dat2$names)
+  dat2 <- reduce(dat2, full_join, by = "query_match")
+  n2 <- dat2[1,grepl("names",colnames(dat2))]
+  dat2 <- dat2[,!grepl("names",colnames(dat2))]
+  colnames(dat2)[2:ncol(dat2)] <- n2
   dat2$input <- dat1$From[match(dat2$query_match,dat1$To)]
   dat2 <- dat2[,c(ncol(dat2),1:(ncol(dat2)-1))]
   dat1<-NULL
