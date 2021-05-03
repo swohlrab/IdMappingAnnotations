@@ -20,9 +20,9 @@ uniprot_annotations <- function(ids,database) {
   uri <- 'http://www.uniprot.org/uniprot/?query='
   idStr <- paste(ids, collapse="+or+")
   format <- '&format=tab&columns=id,entry%20name'
-  fullUri <- paste0(uri,idStr,format)
-  dat <- read.delim(fullUri)
+  dat <- read.delim(paste0(uri,idStr,format))
   query <- dat$Entry
+  dat <- NULL
   ifelse(length(query)>5000,query<-split(query, ceiling(seq_along(query)/5000)),query<-query)
   to <- c('ID',database)
   getIDs <- function(to,query){
@@ -36,7 +36,7 @@ uniprot_annotations <- function(ids,database) {
   dat2 <- unlist(dat2)
   QUERY_II <- dat2[grepl(".From",names(dat2))]
   lto <- dat2[!grepl(".From",names(dat2))]
-  ifelse(length(ids)>2,names <- sub("\\..*", "", gsub('^.+?\\.(.*)', "\\1",names(QUERY_II))) ,names <- sub("\\..*", "", names(QUERY_II)))
+  ifelse(length(ids)>5000,names <- sub("\\..*", "", gsub('^.+?\\.(.*)', "\\1",names(QUERY_II))) ,names <- sub("\\..*", "", names(QUERY_II)))
   #names <- gsub('^.+?\\.(.*)', "\\1",names(QUERY_II))
   #names <- sub("\\..*", "", names)
   dat2 <- as.data.frame(cbind(names,QUERY_II,lto))
