@@ -23,7 +23,7 @@ uniprot_annotations <- function(ids,database) {
   fullUri <- paste0(uri,idStr,format)
   dat <- read.delim(fullUri)
   query <- dat$Entry
-  ifelse(length(query)>2,query<-split(query, ceiling(seq_along(query)/2)),query<-query)
+  ifelse(length(query)>5000,query<-split(query, ceiling(seq_along(query)/5000)),query<-query)
   to <- c('ID',database)
   getIDs <- function(to,query){
     ls <- as.list(to)
