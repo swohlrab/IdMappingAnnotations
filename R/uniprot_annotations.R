@@ -17,13 +17,13 @@
 #' @return A data frame with all requested IDs
 #' @export
 uniprot_annotations <- function(ids,database) {
-  ifelse(length(ids) > 2, ids <- split(ids, ceiling(seq_along(ids)/2)),ids <- list(ids))
+  ifelse(length(ids) > 5000, ids <- split(ids, ceiling(seq_along(ids)/5000)),ids <- list(ids))
   parseIDs <- function(x) {
     as.data.frame(httr::content(httr::POST(url = "https://www.uniprot.org/uploadlists/",body = list(from = "ACC", to = "ACC", format = "tab", query = sprintf("%s", paste(noquote(x), collapse = " ")))), type = "text/tab-separated-values",  col_names = TRUE, col_types = NULL, encoding = "ISO-8859-1"))
   }
   dat1 <- do.call(rbind,lapply(ids, parseIDs))
   query <- dat1$To
-  ifelse(length(query)>2,query<-split(query, ceiling(seq_along(query)/2)),query<-list(query))
+  ifelse(length(query)>5000,query<-split(query, ceiling(seq_along(query)/5000)),query<-list(query))
   to <- c('ID',database)
   getIDs <- function(to,query){
     ls <- as.list(to)
@@ -36,7 +36,7 @@ uniprot_annotations <- function(ids,database) {
   dat2 <- unlist(dat2)
   query_match <- dat2[grepl(".From", names(dat2))]
   lto <- dat2[!grepl(".From", names(dat2))]
-  ifelse(length(query_match) > 2, names <- sub("\\..*", "", gsub("^.+?\\.(.*)","\\1", names(query_match))), names <- sub("\\..*", "",names(query_match)))
+  ifelse(length(query_match) > 5000, names <- sub("\\..*", "", gsub("^.+?\\.(.*)","\\1", names(query_match))), names <- sub("\\..*", "",names(query_match)))
   dat2 <- as.data.frame(cbind(names, query_match, lto)) #rename Query to someting with a or b
   dat2 <- dat2 %>% spread(names, lto)
   dat2$input <- dat1$From[match(dat2$query_match,dat1$To)]
