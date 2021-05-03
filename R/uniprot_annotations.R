@@ -17,12 +17,12 @@
 #' @return A data frame with all requested IDs
 #' @export
 uniprot_annotations <- function(ids,database) {
-  uri <- 'http://www.uniprot.org/uniprot/?query='
-  idStr <- paste(ids, collapse="+or+")
-  format <- '&format=tab&columns=id,entry%20name'
-  dat <- read.delim(paste0(uri,idStr,format))
-  query <- dat$Entry
-  dat <- NULL
+  ifelse(length(ids) > 5000, ids <- split(ids, ceiling(seq_along(ids)/5000)),ids <- ids)
+  parseIDs <- function(x) {
+    as.data.frame(httr::content(httr::POST(url = "https://www.uniprot.org/uploadlists/",body = list(from = "ACC", to = "ACC", format = "tab", query = sprintf("%s", paste(noquote(x), collapse = " ")))), type = "text/tab-separated-values",  col_names = TRUE, col_types = NULL, encoding = "ISO-8859-1"))
+  }
+  dat1 <- do.call(rbind,lapply(ids, parseIDs))
+  query <- dat1$To
   ifelse(length(query)>5000,query<-split(query, ceiling(seq_along(query)/5000)),query<-query)
   to <- c('ID',database)
   getIDs <- function(to,query){
@@ -32,15 +32,17 @@ uniprot_annotations <- function(ids,database) {
     names(total) <- to
     return(total)
   }
-  dat2 <- lapply(query, function(x){getIDs(to=to,query=x)})
+  dat2 <- lapply(query, function(x) {getIDs(to = to, query = x)})
   dat2 <- unlist(dat2)
-  QUERY_II <- dat2[grepl(".From",names(dat2))]
-  lto <- dat2[!grepl(".From",names(dat2))]
-  ifelse(length(ids)>5000,names <- sub("\\..*", "", gsub('^.+?\\.(.*)', "\\1",names(QUERY_II))) ,names <- sub("\\..*", "", names(QUERY_II)))
-  #names <- gsub('^.+?\\.(.*)', "\\1",names(QUERY_II))
-  #names <- sub("\\..*", "", names)
-  dat2 <- as.data.frame(cbind(names,QUERY_II,lto))
-  dat2 <- dat2 %>%  spread(names,lto) #tidyr
-  dat2 <- dat2[ , order(c("QUERY_II",to))]
+  query_match <- dat2[grepl(".From", names(dat2))]
+  lto <- dat2[!grepl(".From", names(dat2))]
+  ifelse(length(query_match) > 5000, names <- sub("\\..*", "", gsub("^.+?\\.(.*)","\\1", names(query_match))), names <- sub("\\..*", "",names(query_match)))
+  dat2 <- as.data.frame(cbind(names, query_match, lto)) #rename Query to someting with a or b
+  dat2 <- dat2 %>% spread(names, lto)
+  dat2$input <- dat1$From[match(dat2$query_match,dat1$To)]
+  dat2 <- dat2[,c(ncol(dat2),1:(ncol(dat2)-1))]
+  dat1<-NULL
+  query_match<-NULL
+  lto<-NULL
   return(dat2)
 }
