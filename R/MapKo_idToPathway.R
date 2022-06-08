@@ -11,7 +11,7 @@
 #' @return dataframe with ko ids and associated kegg pathway information
 #' @export
 MapKo_idToPathway <- function (id) {
-  df <-  as.data.frame(do.call(rbind,strsplit(readLines('http://rest.kegg.jp/link/pathway/ko'),'\t',fixed=T)),stringsAsFactors=F)
+  df <-  as.data.frame(do.call(rbind,strsplit(readLines('http://api.kegg.net/link/pathway/ko'),'\t',fixed=T)),stringsAsFactors=F)
   #remove all "map" entries
   df <- df[!grepl("map",df$V2),]
   df[] <- lapply(df, as.character)
@@ -23,7 +23,7 @@ MapKo_idToPathway <- function (id) {
   df <- merge(df,df2,by="ID")
   df2 <- NULL
   #get gene names
-  df2 <- as.data.frame(do.call(rbind,strsplit(readLines('http://rest.kegg.jp/list/ko'),'\t',fixed=T)),stringsAsFactors=F)
+  df2 <- as.data.frame(do.call(rbind,strsplit(readLines('http://api.kegg.net/list/ko'),'\t',fixed=T)),stringsAsFactors=F)
   df <- merge(df,df2,by.x="V1.x",by.y="V1",all.x = T)
   colnames(df) <- c('ko_id','path_id','path_level_1','path_level_2','path_level_3','gene_name')
   df2 <- NULL
