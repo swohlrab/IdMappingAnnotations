@@ -5,4 +5,4 @@
 #' @param () no need to add something here, just ()
 #' @return kegg brite ids
 #' @export
-brite_ids <- function() {as.data.frame(do.call(rbind,strsplit(readLines('http://rest.kegg.jp/list/brite'),'\t',fixed=T)))}
+brite_ids <- function() {as.data.frame(do.call(rbind,strsplit(readLines('http://api.kegg.net/list/brite'),'\t',fixed=T)))}
