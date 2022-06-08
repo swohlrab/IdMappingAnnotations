@@ -9,7 +9,7 @@
 #' @return list with kegg genes and respective kos
 #' @export
 check <- function(x){
-  input <- paste0('http://api.kegg.net/link/ko/',x)
+  input <- paste0('http://rest.genome.jp/link/ko/',x)
   df <- as.data.frame(do.call(rbind,strsplit(readLines(input),'\t',fixed=T)),stringsAsFactors=F)
   return(df)
 }
