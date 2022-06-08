@@ -8,7 +8,7 @@
 #' @return A data frame with kegg hierachy files
 #' @export
 MakeKeggReferenceTableFromBrite <- function(brite) {
-  htext <- readLines(paste("http://rest.kegg.jp/get/",brite,sep=""))
+  htext <- readLines(paste("http://api.kegg.net/get/",brite,sep=""))
   # collect prefixes
   vb <- gsub("[^[:alnum:]]", "", unique(substring(htext, 1, 1)))
   vb <- vb[!vb==""]
